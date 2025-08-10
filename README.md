@@ -14,7 +14,7 @@ The design is state-machine-based and parameterized for flexibility.
 
 ---
 ## Block Diagram
-![Block Diagram](D:\hp\Documents\Github\SPI-RAM-interface\images\SPI-RAM_blockDiagram.jpeg)
+![Block Diagram](images/SPI-RAM_blockDiagram.jpeg)
 
 ## 🛠 Features
 - **Finite State Machine (FSM)** for SPI operations:
