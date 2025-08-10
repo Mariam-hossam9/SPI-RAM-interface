@@ -20,6 +20,65 @@ Below is the block diagram of the SPI-RAM interface system:
 
 ---
 
+## SPI Slave Module
+
+The **SPI Slave** module receives data from the master device and interacts with the RAM module.
+
+### Ports
+
+| Name     | Type   | Size   | Description |
+|----------|--------|--------|-------------|
+| clk      | Input  | 1 bit  | Clock signal |
+| rst_n    | Input  | 1 bit  | Active low reset signal |
+| SS_n     | Input  | 1 bit  | Slave Select signal |
+| MOSI     | Input  | 1 bit  | Master-Out-Slave-In data signal |
+| tx_data  | Input  | 10 bit | Transfer data output signal. Captures MOSI data for 10 clock cycles and stores it to send to RAM. |
+| tx_valid | Input  | 1 bit  | Indicates when `tx_data` is valid |
+| MISO     | Output | 1 bit  | Master-In-Slave-Out data signal |
+| rx_data  | Output | 10 bit | Received data from the memory |
+| rx_valid | Output | 1 bit  | Indicates when `rx_data` is valid |
+
+---
+
+## Single Port Async RAM Module
+
+The **Single Port Asynchronous RAM** implements a memory block with a single data port.
+
+### Parameters
+- **MEM_DEPTH** (default: 256): Depth of the memory.
+- **ADDR_SIZE** (default: 8): Size of the memory address.
+
+### Ports
+
+| Name     | Type   | Size   | Description |
+|----------|--------|--------|-------------|
+| clk      | Input  | 1 bit  | Clock signal |
+| rst_n    | Input  | 1 bit  | Active low reset signal |
+| din      | Input  | 10 bit | Data input |
+| rx_valid | Input  | 1 bit  | If HIGH, accepts `din[7:0]` to save write/read address or writes memory depending on `din[9:8]` |
+| dout     | Output | 8 bit  | Data output |
+| tx_valid | Output | 1 bit  | HIGH when a memory read is performed |
+
+---
+
+### Command Encoding (`din[9:8]`)
+| Command Bits | Operation | Description |
+|--------------|-----------|-------------|
+| `00` | Write Address | Holds `din[7:0]` internally as write address |
+| `01` | Write Data | Writes `din[7:0]` to memory at the held write address |
+| `10` | Read Address | Holds `din[7:0]` internally as read address |
+| `11` | Read Data | Reads memory at held read address. `tx_valid` HIGH, `dout` holds data. |
+
+---
+
+### Wire Connections
+- `rx_data` (SPI Slave) → `din` (RAM)
+- `rx_valid` (SPI Slave) → `rx_valid` (RAM)
+- `dout` (RAM) → `tx_data` (SPI Slave)
+- `tx_valid` (RAM) → `tx_valid` (SPI Slave)
+
+---
+
 ## Waveform
 Sample simulation waveform showing SPI transactions and RAM operations:
 
