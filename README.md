@@ -1,68 +1,76 @@
-# SPI-RAM-interface
-SPI Slave with RAM and testbench in Verilog
-# SPI Slave with MOSI Register and Testbench
-Verilog-based SPI Slave interface with Single Port Asynchronous RAM for command/data exchange
+# SPI-RAM Interface
 
-## 📌 Overview
-This project implements an **SPI Slave** module in Verilog that:
-- Stores data from the MOSI line into an internal register.
-- Supports `WRITE`, `READ_ADDR`, and `READ_DATA` states.
-- Sends data to the master via MISO when requested.
-- Includes a testbench to simulate two full SPI transactions.
-
-The design is state-machine-based and parameterized for flexibility.
+This project implements an SPI Slave module connected to a Single-Port Asynchronous RAM.  
+It enables read/write operations via SPI protocol and stores/retrieves data from RAM.
 
 ---
+
+## Features
+- SPI Slave functionality (MISO/MOSI/SS)
+- Single-Port Asynchronous RAM storage
+- Separate Read and Write address handling
+- Modular and reusable Verilog code
+
+---
+
 ## Block Diagram
-![Block Diagram](images/SPI-RAM_blockDiagram.jpeg)
+Below is the block diagram of the SPI-RAM interface system:
 
-## 🛠 Features
-- **Finite State Machine (FSM)** for SPI operations:
-  - `IDLE`
-  - `CHK_CMD`
-  - `WRITE`
-  - `READ_ADDR`
-  - `READ_DATA`
-- 10-bit receive register for MOSI data.
-- Transmit capability through MISO.
-- Transaction-ready signal (`rx_valid`).
-- Testbench provided for simulation.
+![Block Diagram](images/SPI-RAM_blockDiagram.png)
 
 ---
 
-## 📂 File Structure
-├── SPI_slave.v # SPI slave module
-├── MOSI_register.v # Dedicated register to store MOSI data
-├── tb_SPI_slave.v # Testbench for two transactions
-├── README.md # Project documentation (this file)
+## Waveform
+Sample simulation waveform showing SPI transactions and RAM operations:
+
+![Waveform](images/Waveform.png)
+
+---
+## Finite State Machine (FSM)
+
+The SPI Slave module is implemented as a finite state machine (FSM) to control data flow between the SPI interface and the RAM module.  
+It operates in **five main states**:
+
+1. **IDLE** – Waits for the Slave Select (`SS_n`) signal to go low, indicating the start of communication.
+2. **CHK_CMD** – Receives and interprets the command bits from MOSI.
+3. **WRITE** – Writes incoming data to the RAM.
+4. **READ_ADDR** – Captures the address from which data will be read.
+5. **READ_DATA** – Sends requested data back to the SPI master via MISO.
+
+### FSM State Diagram
+![FSM Diagram](images/SPI-RAM_FSM.png)
 
 ---
 
-## 🧪 Testbench Details
-The provided testbench simulates:
-1. A `WRITE` transaction from master to slave.
-2. A `READ` transaction to retrieve data from slave.
-
-Waveforms can be analyzed with simulation tools like:
-- **ModelSim**
-- **Vivado**
-
----
-
-## 🚀 How to Run
-1. Open your Verilog simulation tool.
-2. Compile all `.v` files.
-3. Run `SPI_wrapper_tb.v` as the top module.
-4. Inspect waveforms to verify SPI protocol timing.
+### State Transition Summary
+| Current State | Condition                          | Next State    |
+|---------------|------------------------------------|--------------|
+| IDLE          | `SS_n == 0`                        | CHK_CMD      |
+| CHK_CMD       | bit count complete, command decode | WRITE / READ_ADDR / READ_DATA |
+| WRITE         | `SS_n == 1`                        | IDLE         |
+| READ_ADDR     | `SS_n == 1`                        | IDLE         |
+| READ_DATA     | Data sent                          | IDLE         |
 
 ---
 
-## 📜 License
-This project is released under the **MIT License**.  
-You are free to use, modify, and distribute it with attribution.
+## File Descriptions
+- **`SPI_SLAVE.v`** → Verilog module for SPI slave communication.
+- **`Single_port_Async_RAM.v`** → Verilog module for single-port asynchronous RAM.
+- **`README.md`** → Project documentation.
+- **`images/`** → Contains diagrams and waveform images.
 
 ---
 
-## ✍ Author
-**Mariam Hossam**  
-GitHub: [Mariam-hossam9](https://github.com/Mariam-hossam-9)
+## How to Run Simulation
+1. Open your preferred HDL simulator (ModelSim, Vivado, etc.).
+2. Add both `SPI_SLAVE.v` and `Single_port_Async_RAM.v` to the project.
+3. Include your testbench file.
+4. Compile and simulate to observe waveforms.
+
+---
+
+## Author
+**Your Name**  
+[GitHub Profile](https://github.com/Mariam-hossam9)
+
+---
