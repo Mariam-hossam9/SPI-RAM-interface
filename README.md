@@ -70,7 +70,7 @@ It operates in **five main states**:
 ---
 
 ## Author
-**Your Name**  
+**Mariam Hossam**  
 [GitHub Profile](https://github.com/Mariam-hossam9)
 
 ---
