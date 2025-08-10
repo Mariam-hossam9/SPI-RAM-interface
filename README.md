@@ -14,7 +14,7 @@ The design is state-machine-based and parameterized for flexibility.
 
 ---
 ## Block Diagram
-![Block Diagram](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.linkedin.com%2Fposts%2Fahmed-hamdy-5905b6279_excited-to-share-verilog-project-completion-activity-7241820582193885186-ZWta&psig=AOvVaw3hchsEGrIv9FFuWUFPuEqx&ust=1754933152624000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCLCYnMvhgI8DFQAAAAAdAAAAABAE)
+![Block Diagram](D:\OneDrive\Desktop\Pictures\Github\SPI-RAM_blockDiagrams)
 
 ## 🛠 Features
 - **Finite State Machine (FSM)** for SPI operations:
